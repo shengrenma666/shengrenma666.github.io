@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>减肥饮食计算器</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4F46E5',
+                        secondary: '#10B981',
+                        accent: '#F59E0B',
+                        light: '#F3F4F6',
+                        dark: '#1F2937'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .card-shadow {
+                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- 导航栏 -->
+    <nav class="bg-white shadow-md">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fa fa-cutlery text-primary text-2xl"></i>
+                <h1 class="text-xl font-bold text-dark">健康饮食计算器</h1>
+            </div>
+            <div class="hidden md:flex space-x-6">
+                <a href="#" class="text-gray-600 hover:text-primary transition">首页</a>
+                <a href="#food-library" class="text-gray-600 hover:text-primary transition">食物库</a>
+                <a href="#" class="text-gray-600 hover:text-primary transition">饮食建议</a>
+            </div>
+            <button class="md:hidden text-gray-600">
+                <i class="fa fa-bars text-xl"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- 主要内容 -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- 介绍部分 -->
+        <section class="text-center mb-12">
+            <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold text-dark mb-4">科学计算，健康减肥</h2>
+            <p class="text-gray-600 max-w-2xl mx-auto">输入您的个人信息，我们将为您计算每日所需热量和饮食建议，帮助您健康减肥</p>
+        </section>
+
+        <!-- 计算器部分 -->
+        <section class="grid md:grid-cols-2 gap-8 mb-16">
+            <!-- 输入表单 -->
+            <div class="bg-white rounded-xl p-6 card-shadow">
+                <h3 class="text-xl font-semibold mb-6 text-dark flex items-center">
+                    <i class="fa fa-user-circle text-primary mr-2"></i>个人信息
+                </h3>
+                <form id="calculator-form" class="space-y-4">
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="height" class="block text-sm font-medium text-gray-700 mb-1">身高 (厘米)</label>
+                            <input type="number" id="height" min="50" max="250" required
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition">
+                        </div>
+                        <div>
+                            <label for="weight" class="block text-sm font-medium text-gray-700 mb-1">体重 (公斤)</label>
+                            <input type="number" id="weight" min="10" max="300" required
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition">
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="age" class="block text-sm font-medium text-gray-700 mb-1">年龄</label>
+                            <input type="number" id="age" min="5" max="120" required
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">性别</label>
+                            <div class="flex space-x-4">
+                                <label class="inline-flex items-center">
+                                    <input type="radio" name="gender" value="male" checked class="text-primary focus:ring-primary">
+                                    <span class="ml-2">男</span>
+                                </label>
+                                <label class="inline-flex items-center">
+                                    <input type="radio" name="gender" value="female" class="text-primary focus:ring-primary">
+                                    <span class="ml-2">女</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="activity" class="block text-sm font-medium text-gray-700 mb-1">活动量</label>
+                        <select id="activity" required
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition">
+                            <option value="1.2">久坐不动（几乎不运动）</option>
+                            <option value="1.375">轻度活动（每周运动1-3天）</option>
+                            <option value="1.55">中度活动（每周运动3-5天）</option>
+                            <option value="1.725">高度活动（每周运动6-7天）</option>
+                            <option value="1.9">极度活动（每天高强度运动）</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="goal" class="block text-sm font-medium text-gray-700 mb-1">减肥目标</label>
+                        <select id="goal" required
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition">
+                            <option value="-500">每周减0.5公斤（健康速度）</option>
+                            <option value="-1000">每周减1公斤（较快速度）</option>
+                            <option value="0">保持当前体重</option>
+                            <option value="500">每周增0.5公斤</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="w-full bg-primary hover:bg-primary/90 text-white font-medium py-3 px-4 rounded-lg transition flex items-center justify-center">
+                        <i class="fa fa-calculator mr-2"></i>计算饮食需求
+                    </button>
+                </form>
+            </div>
+
+            <!-- 结果显示 -->
+            <div id="result-card" class="bg-white rounded-xl p-6 card-shadow hidden">
+                <h3 class="text-xl font-semibold mb-6 text-dark flex items-center">
+                    <i class="fa fa-line-chart text-primary mr-2"></i>您的饮食建议
+                </h3>
+                
+                <div class="space-y-6">
+                    <div class="p-4 bg-light rounded-lg">
+                        <h4 class="font-medium text-gray-700 mb-2">每日建议摄入热量</h4>
+                        <p id="calories" class="text-3xl font-bold text-primary">0 千卡</p>
+                    </div>
+
+                    <div>
+                        <h4 class="font-medium text-gray-700 mb-3">营养素分配</h4>
+                        <div class="grid grid-cols-3 gap-4">
+                            <div class="p-3 bg-blue-50 rounded-lg text-center">
+                                <p class="text-sm text-gray-600">蛋白质</p>
+                                <p id="protein" class="font-bold text-blue-600">0 克</p>
+                            </div>
+                            <div class="p-3 bg-green-50 rounded-lg text-center">
+                                <p class="text-sm text-gray-600">脂肪</p>
+                                <p id="fat" class="font-bold text-green-600">0 克</p>
+                            </div>
+                            <div class="p-3 bg-yellow-50 rounded-lg text-center">
+                                <p class="text-sm text-gray-600">碳水化合物</p>
+                                <p id="carbs" class="font-bold text-yellow-600">0 克</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="font-medium text-gray-700 mb-2">饮食小贴士</h4>
+                        <ul id="tips" class="text-gray-600 space-y-2 list-disc pl-5">
+                            <!-- 贴士将通过JS动态生成 -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 食物库部分 -->
+        <section id="food-library" class="mb-16">
+            <h3 class="text-2xl font-bold text-dark mb-6 flex items-center">
+                <i class="fa fa-shopping-basket text-primary mr-2"></i>常见食物热量表
+            </h3>
+            
+            <div class="bg-white rounded-xl p-6 card-shadow">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead>
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">食物名称</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">份量</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">热量(千卡)</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">蛋白质(克)</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">脂肪(克)</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">碳水(克)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">鸡胸肉（煮熟）</td>
+                                <td class="px-6 py-4 whitespace-nowrap">100克</td>
+                                <td class="px-6 py-4 whitespace-nowrap">165</td>
+                                <td class="px-6 py-4 whitespace-nowrap">31</td>
+                                <td class="px-6 py-4 whitespace-nowrap">3.6</td>
+                                <td class="px-6 py-4 whitespace-nowrap">0</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">米饭（煮熟）</td>
+                                <td class="px-6 py-4 whitespace-nowrap">100克</td>
+                                <td class="px-6 py-4 whitespace-nowrap">130</td>
+                                <td class="px-6 py-4 whitespace-nowrap">2.6</td>
+                                <td class="px-6 py-4 whitespace-nowrap">0.3</td>
+                                <td class="px-6 py-4 whitespace-nowrap">28</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">鸡蛋</td>
+                                <td class="px-6 py-4 whitespace-nowrap">1个（约50克）</td>
+                                <td class="px-6 py-4 whitespace-nowrap">78</td>
+                                <td class="px-6 py-4 whitespace-nowrap">6.3</td>
+                                <td class="px-6 py-4 whitespace-nowrap">5.3</td>
+                                <td class="px-6 py-4 whitespace-nowrap">0.6</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">苹果</td>
+                                <td class="px-6 py-4 whitespace-nowrap">1个（约150克）</td>
+                                <td class="px-6 py-4 whitespace-nowrap">95</td>
+                                <td class="px-6 py-4 whitespace-nowrap">0.5</td>
+                                <td class="px-6 py-4 whitespace-nowrap">0.3</td>
+                                <td class="px-6 py-4 whitespace-nowrap">25</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">牛奶（低脂）</td>
+                                <td class="px-6 py-4 whitespace-nowrap">200毫升</td>
+                                <td class="px-6 py-4 whitespace-nowrap">102</td>
+                                <td class="px-6 py-4 whitespace-nowrap">6.6</td>
+                                <td class="px-6 py-4 whitespace-nowrap">3.6</td>
+                                <td class="px-6 py-4 whitespace-nowrap">9</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 饮食建议 -->
+        <section class="mb-16">
+            <h3 class="text-2xl font-bold text-dark mb-6 flex items-center">
+                <i class="fa fa-lightbulb-o text-primary mr-2"></i>健康减肥饮食原则
+            </h3>
+            
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-xl card-shadow">
+                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fa fa-balance-scale text-primary text-xl"></i>
+                    </div>
+                    <h4 class="text-lg font-semibold mb-2">热量控制</h4>
+                    <p class="text-gray-600">减肥的核心是热量缺口，但不应过度节食，建议每日热量不低于基础代谢率</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-xl card-shadow">
+                    <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fa fa-leaf text-secondary text-xl"></i>
+                    </div>
+                    <h4 class="text-lg font-semibold mb-2">营养均衡</h4>
+                    <p class="text-gray-600">保证足够的蛋白质摄入，适量健康脂肪，选择复合碳水化合物和大量蔬菜水果</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-xl card-shadow">
+                    <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fa fa-clock-o text-accent text-xl"></i>
+                    </div>
+                    <h4 class="text-lg font-semibold mb-2">规律饮食</h4>
+                    <p class="text-gray-600">保持规律的进食时间，避免暴饮暴食，控制晚餐热量，睡前3小时尽量不进食</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-dark text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="text-center">
+                <div class="flex items-center justify-center space-x-2 mb-4">
+                    <i class="fa fa-cutlery text-primary text-2xl"></i>
+                    <h2 class="text-xl font-bold">健康饮食计算器</h2>
+                </div>
+                <p class="text-gray-400 mb-6">科学饮食，健康减肥</p>
+                <div class="flex justify-center space-x-4 mb-6">
+                    <a href="#" class="text-gray-400 hover:text-white transition"><i class="fa fa-weibo text-xl"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white transition"><i class="fa fa-wechat text-xl"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white transition"><i class="fa fa-instagram text-xl"></i></a>
+                </div>
+                <p class="text-gray-500 text-sm">© 2023 健康饮食计算器 - 仅供参考，不构成医疗建议</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 表单提交处理
+        document.getElementById('calculator-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // 获取表单数据
+            const height = parseFloat(document.getElementById('height').value);
+            const weight = parseFloat(document.getElementById('weight').value);
+            const age = parseInt(document.getElementById('age').value);
+            const gender = document.querySelector('input[name="gender"]:checked').value;
+            const activity = parseFloat(document.getElementById('activity').value);
+            const goal = parseInt(document.getElementById('goal').value);
+            
+            // 计算BMR (基础代谢率) 使用Mifflin-St Jeor公式
+            let bmr;
+            if (gender === 'male') {
+                bmr = 10 * weight + 6.25 * height - 5 * age + 5;
+            } else {
+                bmr = 10 * weight + 6.25 * height - 5 * age - 161;
+            }
+            
+            // 计算每日总能量消耗 (TDEE)
+            const tdee = bmr * activity;
+            
+            // 计算目标热量摄入
+            const targetCalories = tdee + goal;
+            
+            // 计算三大营养素建议摄入量
+            // 蛋白质: 每公斤体重1.6-2.2克
+            const protein = Math.round(weight * 1.8); // 克
+            const proteinCalories = protein * 4; // 每克蛋白质4千卡
+            
+            // 脂肪: 总热量的25-30%
+            const fatPercentage = 0.27;
+            const fatCalories = targetCalories * fatPercentage;
+            const fat = Math.round(fatCalories / 9); // 每克脂肪9千卡
+            
+            // 碳水化合物: 剩余热量
+            const carbsCalories = targetCalories - proteinCalories - fatCalories;
+            const carbs = Math.round(carbsCalories / 4); // 每克碳水4千卡
+            
+            // 显示结果
+            document.getElementById('calories').textContent = Math.round(targetCalories) + ' 千卡';
+            document.getElementById('protein').textContent = protein + ' 克';
+            document.getElementById('fat').textContent = fat + ' 克';
+            document.getElementById('carbs').textContent = carbs + ' 克';
+            
+            // 生成饮食小贴士
+            const tipsList = document.getElementById('tips');
+            tipsList.innerHTML = '';
+            
+            const tips = [
+                `每天饮用足够的水，建议至少2000毫升`,
+                `增加膳食纤维摄入，帮助增加饱腹感`,
+                `蛋白质来源优先选择瘦肉、鱼类、鸡蛋和豆制品`,
+                `碳水化合物尽量选择全谷物、薯类等复合碳水`,
+                `健康的脂肪来源包括坚果、橄榄油和鱼油`
+            ];
+            
+            tips.forEach(tip => {
+                const li = document.createElement('li');
+                li.textContent = tip;
+                tipsList.appendChild(li);
+            });
+            
+            // 显示结果卡片
+            document.getElementById('result-card').classList.remove('hidden');
+            
+            // 滚动到结果部分
+            document.getElementById('result-card').scrollIntoView({ behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>
